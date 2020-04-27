@@ -71,6 +71,14 @@ function promptUser() {
   return inquirer.prompt(questions);
 }
 
+function verifyOverwrite(fileName) {
+  return inquirer.prompt([{
+    type: "confirm",
+    name: "confirmOverwrite",
+    message: fileName + " exists. Overwrite?"
+  }]);
+}
+
 // function writeToFile(fileName, data) {
 // }
 
@@ -78,8 +86,15 @@ async function init() {
   console.log("\n Welcome to the README Generator \n");
   try {
     const answers = await promptUser();
-    console.log(answers);
+    const readme = `README-${answers.repoName}.md`;
+    let overwriteOkay = true;
 
+    if (fs.existsSync(readme)) {
+      overwriteOkay = verifyOverwrite(readme);
+    };
+
+    if (overwriteOkay) {
+    }
   } 
   catch(err) {
     console.log(err);
