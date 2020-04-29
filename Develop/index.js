@@ -88,23 +88,23 @@ async function init() {
   try {
     const answers = await promptUser();
 
-    try {
-      const userInfo = await api.getUser(answers.userName);
-      console.log("userInfo: " + userInfo);
+    // try {
+      const userInfo = api.getUser(answers.userName);
+    //   console.log("userInfo: " + userInfo);
 
-      const readme = `README-${answers.repoName}.md`;
-      let overwriteOkay = true;
+    //   const readme = `README-${answers.repoName}.md`;
+    //   let overwriteOkay = true;
 
-      if (fs.existsSync(readme)) {
-        overwriteOkay = verifyOverwrite(readme);
-      };
+    //   if (fs.existsSync(readme)) {
+    //     overwriteOkay = verifyOverwrite(readme);
+    //   };
 
-      if (overwriteOkay) {
-      }
-    }
-    catch(error) {
-      console.log(error);
-    }
+    //   if (overwriteOkay) {
+    //   }
+    // }
+    // catch(error) {
+    //   console.log(error);
+    // }
   } 
   catch(err) {
     console.log(err);
@@ -112,3 +112,11 @@ async function init() {
 }
 
 init();
+
+// "name":"Andrea Bentley",
+// "company":null,
+// "blog":"http://bentleytech.com/",
+// "location":"Atlanta, GA",
+// "email":null,
+// "hireable":true,
+// "bio":"Experienced software developer with BS in Computer Science from Georgia Tech. Moving into the world of Web Development.",
