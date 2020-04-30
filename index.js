@@ -1,6 +1,7 @@
 const inquirer = require("inquirer");
 const fs = require("fs");
 const api = require("./utils/api.js");
+
 // const util = require("util");
 
 // const writeFileAsync = util.promisify(fs.writeFile);
@@ -90,6 +91,7 @@ async function init() {
 
     // try {
       const userInfo = api.getUser(answers.userName);
+      console.log('userInfo: ', userInfo);
     //   console.log("userInfo: " + userInfo);
 
     //   const readme = `README-${answers.repoName}.md`;
@@ -112,11 +114,3 @@ async function init() {
 }
 
 init();
-
-// "name":"Andrea Bentley",
-// "company":null,
-// "blog":"http://bentleytech.com/",
-// "location":"Atlanta, GA",
-// "email":null,
-// "hireable":true,
-// "bio":"Experienced software developer with BS in Computer Science from Georgia Tech. Moving into the world of Web Development.",
