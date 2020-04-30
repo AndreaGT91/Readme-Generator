@@ -23,28 +23,26 @@ Api.prototype.getUser = async function (username) {
     })
     .then((response) => {
       const {login, html_url, name, avatar_url, company, blog, location, repos_url, email, bio} = response.data;
-      const gitInfo = {
-        'login': login,
-        'html_url': html_url,
-        'name': name, 
-        'avatar_url': avatar_url, 
-        'company': company, 
-        'blog': blog, 
-        'location': location, 
-        'repos_url': repos_url, 
-        'email': email, 
-        'bio': bio
-      }; 
-      return gitInfo
+      this.login = login;
+      this.html_url = html_url;
+      this.name = name;
+      this.avatar_url = avatar_url;
+      this.company = company;
+      this.blog = blog;
+      this.location = location;
+      this.repos_url = repos_url;
+      this.email = email;
+      this.bio = bio;
+      return true
     })
-    .catch(function (error) {
+    .catch((error) => {
       // handle error
       console.log(error);
-      return null
+      return false
     });
-  } catch{(error)=>{
+  } catch{(error) => {
       console.log(error);
-      return null
+      return false
   }}
 };
 
