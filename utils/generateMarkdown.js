@@ -1,8 +1,12 @@
-function generateMarkdown(data) {
+function Markdown() {};
+
+Markdown.prototype.generateMarkdown  = function(answers, data) {
   return `
-# ${data.title}
+# ${answers.projTitle}
 
 `;
-}
+};
 
-module.exports = generateMarkdown;
+const markdown = new Markdown();
+
+module.exports = markdown;

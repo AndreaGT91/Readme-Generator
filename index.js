@@ -1,8 +1,10 @@
 const inquirer = require("inquirer");
 const fs = require("fs");
+const util = require("util");
 const api = require("./utils/api.js");
+const markdown = require("./utils/generateMarkdown.js");
 
-// const util = require("util");
+const getUserData = util.promisify(api.getUser);
 
 // const writeFileAsync = util.promisify(fs.writeFile);
 
@@ -81,36 +83,48 @@ function verifyOverwrite(fileName) {
   }]);
 }
 
-// function writeToFile(fileName, data) {
-// }
+function writeToFile(answers) {
+  const readme = `./readme/README-${answers.repoName}.md`;
+  let writeOkay = true;
+
+  if (fs.existsSync(readme)) {
+    writeOkay = verifyOverwrite(readme);
+  };
+
+  if (writeOkay) {
+    // fs.writeFile(readme, markdown.generateMarkdown(answers, api));
+  }
+};
+
+async function getUserInfo(userName) {
+  let success = false;
+  try {
+    console.log('in getUserInfo');
+    success = await getUserData(userName);
+    console.log('Success: ', success);
+    return success
+  }
+  catch(error) {
+    console.log(error);
+    return success
+  }
+};
 
 async function init() {
-  console.log("\n Welcome to the README Generator \n");
+  console.log("\n *** Welcome to the README Generator *** \n");
   try {
     const answers = await promptUser();
-
-    // try {
-      const userInfo = api.getUser(answers.userName);
-      console.log('userInfo: ', userInfo);
-    //   console.log("userInfo: " + userInfo);
-
-    //   const readme = `README-${answers.repoName}.md`;
-    //   let overwriteOkay = true;
-
-    //   if (fs.existsSync(readme)) {
-    //     overwriteOkay = verifyOverwrite(readme);
-    //   };
-
-    //   if (overwriteOkay) {
-    //   }
-    // }
-    // catch(error) {
-    //   console.log(error);
-    // }
-  } 
-  catch(err) {
-    console.log(err);
+    if (getUserInfo(answers.userName)) {
+      console.log('User name: ', api.name);
+      writeToFile(answers);
+    }
+    else {
+      console.log('Did not get user info');
+    }
   }
-}
+  catch(error) {
+    console.log(error);
+  } 
+};
 
 init();
