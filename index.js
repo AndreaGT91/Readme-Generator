@@ -5,8 +5,7 @@ const api = require("./utils/api.js");
 const markdown = require("./utils/generateMarkdown.js");
 
 const getUserData = util.promisify(api.getUser);
-
-// const writeFileAsync = util.promisify(fs.writeFile);
+const writeFileAsync = util.promisify(fs.writeFile);
 
 const questions = [
   {
@@ -18,56 +17,46 @@ const questions = [
     type: "input",
     name: "repoName",
     message: "What is your repository name?"
-  // },
-  // {
-  //   type: "input",
-  //   name: "projTitle",
-  //   message: "What is your project title?"
-  // },
-  // {
-  //   type: "input",
-  //   name: "projDesc",
-  //   message: "What is your project description?"
-  // },
-  // {
-  //   type: "input",
-  //   name: "projUser",
-  //   message: "What type of person is your audience? (i.e. developer, accountant, teacher)"
-  // },
-  // {
-  //   type: "input",
-  //   name: "projNeed",
-  //   message: "What is your audience's need?"
-  // },
-  // {
-  //   type: "input",
-  //   name: "projResult",
-  //   message: "What is the target outcome for your audience?"
-  // },
-  // {
-  //   type: "input",
-  //   name: "projInstall",
-  //   message: "What are your project's installation instructions?"
-  // },
-  // {
-  //   type: "input",
-  //   name: "projLicense",
-  //   message: "What type of license does your project have?"
-  // },
-  // {
-  //   type: "input",
-  //   name: "projContribs",
-  //   message: "Enter the GitHub usernames of all contributors, separated by commas:"
-  // },
-  // {
-  //   type: "input",
-  //   name: "projTests",
-  //   message: "Project tests?"
-  // },
-  // {
-  //   type: "input",
-  //   name: "projQs",
-  //   message: "Project questions?"
+  },
+  {
+    type: "input",
+    name: "projTitle",
+    message: "What is your project title?"
+  },
+  {
+    type: "input",
+    name: "projDesc",
+    message: "What is your project description?"
+  },
+  {
+    type: "input",
+    name: "projInstall",
+    message: "What are your project's installation instructions?"
+  },
+  {
+    type: "input",
+    name: "projMods",
+    message: "Enter your dependencies, separated by commas:"
+  },
+  {
+    type: "input",
+    name: "projUsage",
+    message: "How do you use your project?"
+  },
+  {
+    type: "input",
+    name: "projLicense",
+    message: "What type of license does your project have?"
+  },
+  {
+    type: "input",
+    name: "projContrib",
+    message: "How would some contribute to your project?"
+  },
+  {
+    type: "input",
+    name: "projTests",
+    message: "What are your project's tests?"
   }
 ];
 
@@ -83,17 +72,22 @@ function verifyOverwrite(fileName) {
   }]);
 }
 
-function writeToFile(answers) {
-  const readme = `./readme/README-${answers.repoName}.md`;
+function writeToFile(filename, answers) {
+  let success = false;
   let writeOkay = true;
 
-  if (fs.existsSync(readme)) {
-    writeOkay = verifyOverwrite(readme);
+  if (fs.existsSync(filename)) {
+    writeOkay = verifyOverwrite(filename);
   };
 
   if (writeOkay) {
-    // fs.writeFile(readme, markdown.generateMarkdown(answers, api));
+    writeFileAsync(filename, markdown.generateMarkdown(answers, api), (error) => {
+      if (error) throw error;
+      success = true;
+    });
   }
+
+  return success
 };
 
 async function getUserInfo(userName) {
@@ -116,7 +110,11 @@ async function init() {
     const answers = await promptUser();
     if (getUserInfo(answers.userName)) {
       console.log('User name: ', api.name);
-      writeToFile(answers);
+      const readme = `./readme/README-${answers.repoName}.md`;
+      const success = writeToFile(readme, answers);
+      if (success) {
+        console.log('Created ', readme);
+      }
     }
     else {
       console.log('Did not get user info');
