@@ -21,7 +21,7 @@ const questions = [
   {
     type: "input",
     name: "projTitle",
-    message: "What is your project title?"
+    message: "What is your project title?",
   },
   {
     type: "input",
@@ -31,12 +31,12 @@ const questions = [
   {
     type: "input",
     name: "projInstall",
-    message: "What are your project's installation instructions?"
+    message: "What are your project's installation instructions?",
   },
   {
     type: "input",
     name: "projMods",
-    message: "Enter your dependencies, separated by commas:"
+    message: "Enter your dependencies, separated by commas:",
   },
   {
     type: "input",
@@ -46,7 +46,7 @@ const questions = [
   {
     type: "input",
     name: "projLicense",
-    message: "What type of license does your project have?"
+    message: "What type of license does your project have?",
   },
   {
     type: "input",
@@ -93,9 +93,7 @@ function writeToFile(filename, answers) {
 async function getUserInfo(userName) {
   let success = false;
   try {
-    console.log('in getUserInfo');
     success = await getUserData(userName);
-    console.log('Success: ', success);
     return success
   }
   catch(error) {
@@ -108,16 +106,16 @@ async function init() {
   console.log("\n *** Welcome to the README Generator *** \n");
   try {
     const answers = await promptUser();
-    if (getUserInfo(answers.userName)) {
-      console.log('User name: ', api.name);
-      const readme = `./readme/README-${answers.repoName}.md`;
-      const success = writeToFile(readme, answers);
-      if (success) {
-        console.log('Created ', readme);
-      }
+    if ((answers.userName.trim() !== '') && (!getUserInfo(answers.userName))) {
+      console.log('Unable to retrieve GitHub information.');
+    }
+    const readme = `./readme/README-${answers.repoName}.md`;
+    const success = writeToFile(readme, answers);
+    if (success) {
+      console.log('Created ', readme);
     }
     else {
-      console.log('Did not get user info');
+      console.log('Unable to create readme file at this time.');
     }
   }
   catch(error) {

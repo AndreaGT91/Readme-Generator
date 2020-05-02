@@ -1,11 +1,5 @@
 # Readme-Generator
-Application will query user for information, then build a README.md files for their project
-
-[![Node version](https://img.shields.io/node/v/axios.svg?style=flat)](http://nodejs.org/download/)
-[![Node version](https://img.shields.io/node/v/dotenv.svg?style=flat)](http://nodejs.org/download/)
-[![Node version](https://img.shields.io/node/v/fs.svg?style=flat)](http://nodejs.org/download/)
-[![Node version](https://img.shields.io/node/v/inquirer.svg?style=flat)](http://nodejs.org/download/)
-[![Node version](https://img.shields.io/node/v/util.svg?style=flat)](http://nodejs.org/download/)
+Application will query user for information, then build a README.md file for their project.
 
 # Unit 09 Node.js and ES6+ Homework: Good README Generator
 

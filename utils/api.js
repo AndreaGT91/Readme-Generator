@@ -33,7 +33,6 @@ Api.prototype.getUser = async function (username) {
       this.repos_url = repos_url;
       this.email = email;
       this.bio = bio;
-      console.log(this);
       return true
     })
     .catch((error) => {
