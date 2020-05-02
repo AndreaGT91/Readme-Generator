@@ -4,7 +4,6 @@ const util = require("util");
 const api = require("./utils/api.js");
 const markdown = require("./utils/generateMarkdown.js");
 
-const getUserData = util.promisify(api.getUser);
 const writeFileAsync = util.promisify(fs.writeFile);
 
 const questions = [
@@ -60,11 +59,7 @@ const questions = [
   }
 ];
 
-function promptUser() {
-  return inquirer.prompt(questions);
-}
-
-function verifyOverwrite(fileName) {
+async function verifyOverwrite(fileName) {
   return inquirer.prompt([{
     type: "confirm",
     name: "confirmOverwrite",
@@ -72,55 +67,35 @@ function verifyOverwrite(fileName) {
   }]);
 }
 
-function writeToFile(filename, answers) {
-  let success = false;
+async function writeToFile(filename, answers) {
   let writeOkay = true;
 
   if (fs.existsSync(filename)) {
-    writeOkay = verifyOverwrite(filename);
+    writeOkay = await verifyOverwrite(filename);
   };
 
   if (writeOkay) {
-    writeFileAsync(filename, markdown.generateMarkdown(answers, api), (error) => {
-      if (error) throw error;
-      success = true;
-    });
-  }
-
-  return success
-};
-
-async function getUserInfo(userName) {
-  let success = false;
-  try {
-    success = await getUserData(userName);
-    return success
-  }
-  catch(error) {
-    console.log(error);
-    return success
+    if (writeFileAsync(filename, markdown.generateMarkdown(answers, api), (error) => {
+      console.log('Unable to create readme file at this time. \n', error);
+    })) {
+      console.log('Created ', filename);
+    }
   }
 };
 
 async function init() {
   console.log("\n *** Welcome to the README Generator *** \n");
   try {
-    const answers = await promptUser();
-    if ((answers.userName.trim() !== '') && (!getUserInfo(answers.userName))) {
-      console.log('Unable to retrieve GitHub information.');
-    }
-    const readme = `./readme/README-${answers.repoName}.md`;
-    const success = writeToFile(readme, answers);
-    if (success) {
-      console.log('Created ', readme);
-    }
-    else {
-      console.log('Unable to create readme file at this time.');
-    }
+    const answers = await inquirer.prompt(questions);
+    await api.getUserInfo(answers.userName.trim())
+    .finally(() => {
+      const readme = `./readme/README-${answers.repoName.trim()}.md`;
+      writeToFile(readme, answers);
+    });
   }
-  catch(error) {
+  catch (error) {
     console.log(error);
-  } 
+  }
 };
 
 init();

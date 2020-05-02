@@ -90,15 +90,11 @@ function getTests(tests) {
 }
   
 function getQuestions(data) {
-  // TODO: Just for testing
-  const name = 'Andrea Bentley';
-  const urlPic = 'https://avatars2.githubusercontent.com/u/58275699?v=4';
-  const login = 'AndreaGT91';
-  const email = 'andrea@bentleytech.com';
-  // const name = data.name.trim();
-  // const urlPic = data.avatar_url.trim();
-  // const login = data.login.trim();
-  // const email = data.email.trim();
+  const name = data.name.trim();
+  const urlPic = data.avatar_url.trim();
+  const login = data.login.trim();
+  const email = data.email.trim();
+
   if ((name === '') && (urlPic === '') && (login === '') && (email === '')) {
     return ''
   }
@@ -107,7 +103,7 @@ function getQuestions(data) {
     if (urlPic !== '') {
       if (name === '') {questions += '![Picture]'}
       else {questions += `![${name}]`};
-      questions += `(${urlPic}&s=50)  `;
+      questions += `(${urlPic}&s=48)  `;
     }
     if (name !== '') {questions += `${name}  `};
     if (login !== '') {questions += `(${login})  `};
